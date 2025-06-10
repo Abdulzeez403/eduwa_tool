@@ -27,13 +27,15 @@ export default function SignupPage() {
     name: string;
     email: string;
     password: string;
+    role: string;
   }) => {
     setLoading(true);
     try {
       const user = await registerUser(
         values.email,
         values.password,
-        values.name
+        values.name,
+        values.role
       );
 
       alert("Signup successful!");
@@ -64,7 +66,7 @@ export default function SignupPage() {
         </h1>
 
         <Formik
-          initialValues={{ name: "", email: "", password: "" }}
+          initialValues={{ name: "", email: "", password: "", role: "student" }}
           validationSchema={SignupSchema}
           onSubmit={handleSignup}
         >
@@ -88,6 +90,22 @@ export default function SignupPage() {
                 name="email"
                 placeHolder="Enter your email"
               />
+
+              <label htmlFor="role" className="font-semibold text-gray-700">
+                Role
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={values.role}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="border rounded-md p-2"
+              >
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="school">School</option>
+              </select>
 
               <ApTextInput
                 label="Password"

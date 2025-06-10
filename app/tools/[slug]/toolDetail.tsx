@@ -1,7 +1,5 @@
-// app/tools/[slug]/ToolDetails.tsx
 "use client";
 
-import { useEffect, useState } from "react";
 import { Star, Globe } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import HomeLayout from "@/app/homeLayout";
 
 export default function ToolDetails({ tool }: { tool: any }) {
-  // Optional: still use useState/useEffect here if you need dynamic logic
   return (
     <HomeLayout>
       <div className="py-8 w-[80%] mx-auto">

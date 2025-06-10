@@ -1,5 +1,4 @@
 "use client";
-
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
@@ -65,7 +64,7 @@ export default function ToolForm({
 }: ToolFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [toolData, setToolData] = useState<any | null>(null);
-  console.log(slug, "the data!"); // <-- This logs the old state, not the updated one
+  console.log(slug, "the data!");
 
   useEffect(() => {
     if (!slug) return;
@@ -75,7 +74,6 @@ export default function ToolForm({
         const response = await getTool(slug);
 
         setToolData(response.documents?.[0]);
-        console.log(toolData, "the data!"); // <-- This logs the old state, not the updated one
       } catch (error) {
         console.error("Failed to fetch tool", error);
       }
@@ -177,6 +175,8 @@ export default function ToolForm({
             website_logo: websiteLogoUrl,
             website_image: websiteImageUrl,
           };
+
+          console.log(documentId, "the id!");
 
           if (documentId) {
             await updateTool(documentId, toolPayload);

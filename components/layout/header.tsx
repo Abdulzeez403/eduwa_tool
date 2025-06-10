@@ -5,9 +5,22 @@ import { BookOpen, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+
+  const { user } = useAuth();
+
+  const handlesubmitTools = () => {
+    if (user) {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/auth/signup");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -29,24 +42,13 @@ export function Header() {
           >
             Browse Tools
           </Link>
-          <Link
-            href="#categories"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Categories
-          </Link>
-          <Link
-            href="#featured"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Featured
-          </Link>
-          <Link
-            href="/submit-tool"
+
+          <button
+            onClick={handlesubmitTools}
             className="text-sm font-medium transition-colors hover:text-primary"
           >
             Submit Tool
-          </Link>
+          </button>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm" asChild>
               <Link href="/auth/signin">Login</Link>

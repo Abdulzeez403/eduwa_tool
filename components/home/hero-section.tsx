@@ -21,7 +21,9 @@ export function HeroSection() {
     e.preventDefault();
     if (searchQuery.trim()) {
       // Navigate to tools page with search query
-      window.location.href = `/tools?search=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/tools?category=${encodeURIComponent(
+        searchQuery
+      )}`;
     }
   };
 

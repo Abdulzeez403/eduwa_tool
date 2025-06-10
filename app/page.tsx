@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <HomeLayout>
       <HeroSection />
-      <div className="flex justify-center items-center">
+      <div className="mx-4 flex justify-center items-center">
         <div>
           <CategoriesSection />
           <FeaturedToolsSection />

@@ -134,12 +134,13 @@ export function FeaturedToolsSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card className="h-full overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group border-2">
-                <div className="aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden">
                   <img
                     src={tool.website_image}
                     alt={tool.website_image}
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   />
+                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
                 </div>
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start mb-2">

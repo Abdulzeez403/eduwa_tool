@@ -15,7 +15,7 @@ export function useAuth() {
         setUser(user as any);
       } catch {
         setUser(null);
-        router.push("/auth/signin"); // redirect to login if not authenticated
+        router.push("/"); // redirect to login if not authenticated
       } finally {
         setLoading(false);
       }

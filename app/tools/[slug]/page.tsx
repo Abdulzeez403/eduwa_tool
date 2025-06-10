@@ -1,4 +1,3 @@
-// app/tools/[slug]/page.tsx
 import { getTool, listTools } from "@/lib/crud";
 import { notFound } from "next/navigation";
 import ToolDetails from "./toolDetail";

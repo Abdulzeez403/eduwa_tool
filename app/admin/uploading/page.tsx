@@ -8,6 +8,7 @@ import { listTools, deleteTool, insertData } from "@/lib/crud";
 export default function UploadingPage() {
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [docId, setDocid] = useState<string | null>(null);
   const [tools, setTools] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -38,8 +39,9 @@ export default function UploadingPage() {
     }
   };
 
-  const handleEdit = (slug: string) => {
+  const handleEdit = (slug: string, doc: string) => {
     setEditId(slug);
+    setDocid(doc);
     setShowModal(true);
   };
 
@@ -126,7 +128,7 @@ export default function UploadingPage() {
 
             <div className="mt-4 flex space-x-3">
               <button
-                onClick={() => handleEdit(tool.slug)}
+                onClick={() => handleEdit(tool.slug, tool.$id)}
                 className="flex items-center px-3 py-1 bg-yellow-400 hover:bg-yellow-500 rounded-md text-black transition"
                 aria-label={`Edit ${tool.name}`}
               >
@@ -182,6 +184,7 @@ export default function UploadingPage() {
       >
         <ToolForm
           slug={editId as any}
+          documentId={docId as any}
           onComplete={() => {
             setShowModal(false);
             fetchTools();
