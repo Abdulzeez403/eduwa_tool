@@ -31,7 +31,7 @@ export function Header() {
           className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
         >
           <BookOpen className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">Eduwa</span>
+          <span className="text-xl font-bold">EduwaTools</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -80,7 +80,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden border-t py-4 bg-background/95 backdrop-blur">
+        <div className=" mx-4 md:hidden border-t py-4 bg-background/95 backdrop-blur">
           <div className="container flex flex-col space-y-3">
             <Link
               href="/tools"
@@ -89,7 +89,7 @@ export function Header() {
             >
               Browse Tools
             </Link>
-            <Link
+            {/* <Link
               href="#categories"
               className="text-sm font-medium transition-colors hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
@@ -102,7 +102,7 @@ export function Header() {
               onClick={() => setIsMenuOpen(false)}
             >
               Featured
-            </Link>
+            </Link> */}
             <Link
               href="/submit-tool"
               className="text-sm font-medium transition-colors hover:text-primary"
@@ -112,10 +112,10 @@ export function Header() {
             </Link>
             <div className="flex items-center space-x-2 pt-2">
               <Button variant="outline" size="sm" className="w-full" asChild>
-                <Link href="/login">Login</Link>
+                <Link href="/auth/signin">Login</Link>
               </Button>
               <Button size="sm" className="w-full" asChild>
-                <Link href="/signup">Sign Up</Link>
+                <Link href="/auth/signup">Sign Up</Link>
               </Button>
             </div>
           </div>
