@@ -85,7 +85,7 @@ export default function ToolForm({
   async function uploadFile(file: File) {
     if (!file) return "";
     const upload = await storage.createFile(
-      "68450dd10002bff4462f",
+      process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!,
       ID.unique(),
       file
     );
