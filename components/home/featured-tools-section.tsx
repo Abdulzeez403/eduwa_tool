@@ -93,7 +93,6 @@ export function FeaturedToolsSection() {
       try {
         const response = await listTools();
         setTools(response.documents as any);
-        console.log("Tools:", response.documents);
       } catch (error) {
         console.error("Failed to fetch tools:", error);
       }
@@ -126,73 +125,57 @@ export function FeaturedToolsSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {tools?.slice(0, 6).map((tool: any, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="h-full overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group border-2">
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={tool.website_image}
-                    alt={tool.website_image}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
-                </div>
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="space-y-2">
-                      <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
-                        {tool?.name}
-                      </CardTitle>
-                      <Badge variant="secondary" className="text-xs">
-                        {tool.category}
-                      </Badge>
+            <Link href={`/tools/${tool.slug}`} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="h-full overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group border-2">
+                  <div className="relative aspect-video overflow-hidden">
+                    <img
+                      src={tool.website_image}
+                      alt={tool.website_image}
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+                  </div>
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="space-y-2">
+                        <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+                          {tool?.name}
+                        </CardTitle>
+                        <Badge variant="secondary" className="text-xs">
+                          {tool.category}
+                        </Badge>
+                      </div>
+                      {tool.free ? (
+                        <Badge
+                          variant="outline"
+                          className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800"
+                        >
+                          Free
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800"
+                        >
+                          Premium
+                        </Badge>
+                      )}
                     </div>
-                    {tool.free ? (
-                      <Badge
-                        variant="outline"
-                        className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800"
-                      >
-                        Free
-                      </Badge>
-                    ) : (
-                      <Badge
-                        variant="outline"
-                        className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800"
-                      >
-                        Premium
-                      </Badge>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-4">
-                  <CardDescription className="text-sm line-clamp-2 leading-relaxed">
-                    {tool.description}
-                  </CardDescription>
-                </CardContent>
-                <CardFooter className="flex justify-between items-center pt-4 border-t">
-                  <div className="flex items-center space-x-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    {/* <span className="text-sm font-semibold">{tool.rating}</span> */}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                  >
-                    <Link href={`/tools/${tool.slug}`}>
-                      View Details
-                      <ArrowRight className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
+                  </CardHeader>
+                  <CardContent className="pb-4">
+                    <CardDescription className="text-sm line-clamp-2 leading-relaxed">
+                      {tool.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </Link>
           ))}
         </div>
 

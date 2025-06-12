@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import HomeLayout from "../homeLayout";
-import { listTools } from "@/lib/crud";
+import { fetchFilteredTools, listTools } from "@/lib/crud";
 import {
   SheetTrigger,
   SheetContent,
@@ -24,6 +24,15 @@ import {
   Sheet,
 } from "@/components/ui/sheet";
 import { useSearchParams } from "next/navigation";
+import { Models } from "appwrite";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationLink,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 const categories = [
   { id: "exams", label: "Exams" },
@@ -32,55 +41,42 @@ const categories = [
   { id: "schools", label: "Schools" },
 ];
 
-const audiences = [
-  { id: "students", label: "Students" },
-  { id: "teachers", label: "Teachers" },
-  { id: "schools", label: "Schools" },
-  { id: "parents", label: "Parents" },
-];
-
 export default function ToolsPage() {
   const searchParams = useSearchParams();
+
   const defaultCategory = searchParams.get("category");
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    defaultCategory ? [defaultCategory] : []
+    defaultCategory
+      ? defaultCategory.split(",").map((cat) => cat.toLowerCase().trim())
+      : []
   );
+
   const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
-  const [tools, setTools] = useState([]);
+  const [tools, setTools] = useState<Models.Document[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const pageSize = 9; //
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   useEffect(() => {
     const fetchTools = async () => {
       try {
-        const response = await listTools();
-        setTools(response.documents as any);
+        const response = await fetchFilteredTools({
+          categories: selectedCategories,
+          page: currentPage,
+          limit: pageSize,
+        });
+        setTools(response.documents);
+        setTotalCount(response.total);
       } catch (error) {
         console.error("Failed to fetch tools:", error);
       }
     };
 
     fetchTools();
-  }, []);
-
-  useEffect(() => {
-    if (defaultCategory) {
-      setSelectedCategories([defaultCategory]);
-    }
-  }, [defaultCategory]);
-
-  const filteredTools = tools.filter((tool: any) => {
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(tool.category);
-
-    const matchesAudience =
-      selectedAudiences.length === 0 ||
-      selectedAudiences.some((audience) =>
-        (tool.audience || []).includes(audience)
-      );
-
-    return matchesCategory && matchesAudience;
-  });
+  }, [selectedCategories, selectedAudiences, currentPage]);
 
   return (
     <HomeLayout>
@@ -164,50 +160,6 @@ export default function ToolsPage() {
                         </ul>
                       </ScrollArea>
                     </section>
-
-                    <Separator />
-
-                    {/* Audience Filter */}
-                    <section className="space-y-3">
-                      <h3 className="font-semibold text-sm tracking-wide uppercase text-muted-foreground">
-                        Audience
-                      </h3>
-                      <ScrollArea className="h-[180px] pr-2">
-                        <ul className="space-y-2">
-                          {audiences.map((audience) => (
-                            <li
-                              key={audience.id}
-                              className="flex items-center gap-2"
-                            >
-                              <Checkbox
-                                id={`aud-${audience.id}`}
-                                checked={selectedAudiences.includes(
-                                  audience.id
-                                )}
-                                onCheckedChange={(checked) =>
-                                  checked
-                                    ? setSelectedAudiences([
-                                        ...selectedAudiences,
-                                        audience.id,
-                                      ])
-                                    : setSelectedAudiences(
-                                        selectedAudiences.filter(
-                                          (id) => id !== audience.id
-                                        )
-                                      )
-                                }
-                              />
-                              <label
-                                htmlFor={`aud-${audience.id}`}
-                                className="text-sm leading-none cursor-pointer"
-                              >
-                                {audience.label}
-                              </label>
-                            </li>
-                          ))}
-                        </ul>
-                      </ScrollArea>
-                    </section>
                   </CardContent>
                 </Card>
               </div>
@@ -278,48 +230,6 @@ export default function ToolsPage() {
                     </ul>
                   </ScrollArea>
                 </section>
-
-                <Separator />
-
-                {/* Audience Filter */}
-                <section className="space-y-3">
-                  <h3 className="font-semibold text-sm tracking-wide uppercase text-muted-foreground">
-                    Audience
-                  </h3>
-                  <ScrollArea className="h-[180px] pr-2">
-                    <ul className="space-y-2">
-                      {audiences.map((audience) => (
-                        <li
-                          key={audience.id}
-                          className="flex items-center gap-2"
-                        >
-                          <Checkbox
-                            id={`aud-${audience.id}`}
-                            checked={selectedAudiences.includes(audience.id)}
-                            onCheckedChange={(checked) =>
-                              checked
-                                ? setSelectedAudiences([
-                                    ...selectedAudiences,
-                                    audience.id,
-                                  ])
-                                : setSelectedAudiences(
-                                    selectedAudiences.filter(
-                                      (id) => id !== audience.id
-                                    )
-                                  )
-                            }
-                          />
-                          <label
-                            htmlFor={`aud-${audience.id}`}
-                            className="text-sm leading-none cursor-pointer"
-                          >
-                            {audience.label}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollArea>
-                </section>
               </CardContent>
             </Card>
           </aside>
@@ -330,45 +240,84 @@ export default function ToolsPage() {
               <div className="text-center text-muted-foreground">
                 Loading tools or no tools available.
               </div>
-            ) : filteredTools.length === 0 ? (
+            ) : tools?.length === 0 ? (
               <div className="text-center text-muted-foreground">
                 No tools match the selected filters.
               </div>
             ) : (
               <div className="mx-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredTools.map((tool: any, index: number) => (
-                  <Card
-                    key={index}
-                    className="overflow-hidden hover:shadow-md transition-shadow duration-200"
-                  >
-                    <div className="aspect-video overflow-hidden">
-                      <img
-                        src={tool.website_image}
-                        alt={tool.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <CardHeader>
-                      <CardTitle>{tool.name}</CardTitle>
-                      <CardDescription className="capitalize text-muted-foreground">
-                        {tool.category}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {tool.description}
-                      </p>
-                    </CardContent>
-                    <CardFooter className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">
-                        Rating: {tool.rating}
-                      </span>
-                      <Button asChild size="sm">
-                        <Link href={`/tools/${tool.slug}`}>View</Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
+                {tools?.map((tool: any, index: number) => (
+                  <Link href={`/tools/${tool.slug}`} key={index}>
+                    <Card className="overflow-hidden hover:shadow-md transition-shadow duration-200">
+                      <div className="relative aspect-video overflow-hidden">
+                        <img
+                          src={tool.website_image}
+                          alt={tool.website_image}
+                          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+                      </div>
+                      <CardHeader>
+                        <CardTitle>{tool.name}</CardTitle>
+                        <CardDescription className="capitalize text-muted-foreground">
+                          {tool.category}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {tool.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
+              </div>
+            )}
+
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        className={
+                          currentPage === 1
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+
+                    {[...Array(totalPages)].map((_, idx) => (
+                      <PaginationItem key={idx}>
+                        <PaginationLink
+                          isActive={currentPage === idx + 1}
+                          onClick={() => setCurrentPage(idx + 1)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            Math.min(prev + 1, totalPages)
+                          )
+                        }
+                        className={
+                          currentPage === totalPages
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               </div>
             )}
           </section>

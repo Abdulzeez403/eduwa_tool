@@ -15,8 +15,10 @@ export default function ToolDetails({ tool }: { tool: any }) {
           {/* Left Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Header Section */}
-            <div className="flex items-start gap-6">
-              <div className="w-24 h-24 rounded-lg overflow-hidden">
+            {/* Header Section */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              {/* Image */}
+              <div className="w-full h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden">
                 <img
                   src={tool.website_image}
                   alt={tool.name}
@@ -24,20 +26,23 @@ export default function ToolDetails({ tool }: { tool: any }) {
                 />
               </div>
 
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold mb-2">{tool.name}</h1>
-                <div className="flex items-center gap-4 text-muted-foreground flex-wrap">
+              {/* Name, Rating, Categories */}
+              <div className="flex-1 w-full">
+                <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+                  {tool.name}
+                </h1>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-muted-foreground">
                   {tool.rating && (
                     <>
                       <div className="flex items-center">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                         <span>{tool.rating}</span>
                       </div>
-                      <span>•</span>
+                      <span className="hidden sm:inline">•</span>
                     </>
                   )}
                   {Array.from(new Set(tool.category) as Set<string>).map(
-                    (cat: string, i: number) => (
+                    (cat, i) => (
                       <Badge key={i} variant="outline">
                         {cat}
                       </Badge>
@@ -46,16 +51,19 @@ export default function ToolDetails({ tool }: { tool: any }) {
                 </div>
               </div>
 
-              <a
-                href={tool.website_link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Visit Website
-                </Button>
-              </a>
+              {/* Button */}
+              <div className="w-full sm:w-auto mt-4 sm:mt-0">
+                <a
+                  href={tool.website_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="w-full sm:w-auto flex items-center justify-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    Visit Website
+                  </Button>
+                </a>
+              </div>
             </div>
 
             {/* Description Section */}
@@ -64,7 +72,7 @@ export default function ToolDetails({ tool }: { tool: any }) {
                 <CardTitle>About {tool.name}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{tool.description}</p>
+                <p className="text-muted-foreground">{tool.about}</p>
               </CardContent>
             </Card>
 
