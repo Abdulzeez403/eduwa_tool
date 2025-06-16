@@ -15,7 +15,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import HomeLayout from "../homeLayout";
-import { fetchFilteredTools, listTools } from "@/lib/crud";
+import {
+  addGuestPermissionToAllDocs,
+  fetchFilteredTools,
+  listTools,
+} from "@/lib/crud";
 import {
   SheetTrigger,
   SheetContent,
@@ -89,12 +93,8 @@ export default function ToolsPage() {
             </SheetTrigger>
 
             <SheetContent side="left" className="w-[80%] sm:w-[60%]">
-              <SheetHeader>
-                <SheetTitle>Filters</SheetTitle>
-              </SheetHeader>
-
               {/* Your filter card (copied as-is) */}
-              <div className="mt-4">
+              <div className="">
                 <Card className="border-none shadow-none">
                   {/* Move your entire <CardHeader> and <CardContent> filter logic here */}
                   {/* Copy it from the sidebar below */}

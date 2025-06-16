@@ -1,5 +1,6 @@
 // lib/auth.ts
-import { account, database } from "./appwrite";
+import { account } from "./appwrite";
+import { ID } from "appwrite";
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID!;
 
@@ -9,18 +10,29 @@ export async function registerUser(
   name: string,
   role: string
 ) {
-  // Create the user account
-  const user = await account.create("unique()", email, password, name);
+  try {
+    // Step 1: Create the user account
+    const user = await account.create(ID.unique(), email, password, name);
 
-  // Save role and other user info in a separate collection linked by userId
-  await database.createDocument(DATABASE_ID, COLLECTION_ID, "unique()", {
-    userId: user.$id,
-    name,
-    email,
-    role,
-  });
+    // Step 2: Store additional user data in your collection
+    // await database.createDocument(
+    //   DATABASE_ID,
+    //   COLLECTION_ID,
+    //   ID.unique(), // ✅ generate unique document ID
+    //   {
+    //     userId: user.$id,
+    //     name,
+    //     email,
+    //     role,
+    //     description: "New user",
+    //   }
+    // );
 
-  return user;
+    return user;
+  } catch (error: any) {
+    console.error("Register error:", error);
+    throw error; // rethrow to handle in frontend or caller
+  }
 }
 
 export async function loginUser(email: string, password: string) {

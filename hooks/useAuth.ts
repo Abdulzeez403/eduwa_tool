@@ -8,20 +8,19 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    async function getCurrentUser() {
-      try {
-        const user = await account.get();
-        setUser(user as any);
-      } catch {
-        setUser(null);
-        router.push("/"); // redirect to login if not authenticated
-      } finally {
-        setLoading(false);
-      }
-    }
-    getCurrentUser();
-  }, [router]);
-
+  // useEffect(() => {
+  //   async function getCurrentUser() {
+  //     try {
+  //       const user = await account.get();
+  //       setUser(user as any);
+  //     } catch {
+  //       setUser(null);
+  //       router.push("/"); // redirect to login if not authenticated
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   getCurrentUser();
+  // }, [router]);
   return { user, loading };
 }

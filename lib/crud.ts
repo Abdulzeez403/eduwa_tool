@@ -1,6 +1,6 @@
 // lib/crud.ts
 
-import { ID, Query } from "appwrite";
+import { ID, Permission, Query, Role } from "appwrite";
 import { database } from "./appwrite";
 import { AItools } from "./contanst";
 
@@ -104,3 +104,37 @@ export const fetchFilteredTools = async ({
 
   return response; // return full response including `total`
 };
+
+export const addGuestPermissionToAllDocs = async () => {
+  try {
+    const docs = await database.listDocuments(DATABASE_ID, COLLECTION_ID);
+
+    for (const doc of docs.documents) {
+      const permissions = new Set(doc.$permissions); // To avoid duplicates
+
+      // Only add if guest read is missing
+      const guestRead = Permission.read(Role.guests());
+      if (!permissions.has(guestRead)) {
+        permissions.add(guestRead);
+
+        await database.updateDocument(
+          DATABASE_ID,
+          COLLECTION_ID,
+          doc.$id,
+          {}, // No data changes
+          Array.from(permissions) // New permissions
+        );
+
+        console.log(`✅ Updated document: ${doc.$id}`);
+      } else {
+        console.log(`ℹ️ Already has guest permission: ${doc.$id}`);
+      }
+    }
+
+    console.log("🎉 Done updating all documents!");
+  } catch (error) {
+    console.error("❌ Error updating documents:", error);
+  }
+};
+
+addGuestPermissionToAllDocs();

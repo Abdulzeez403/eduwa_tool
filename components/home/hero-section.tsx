@@ -154,9 +154,9 @@ export function HeroSection() {
               <Button
                 type="submit"
                 size="lg"
-                className="rounded-xl px-8 py-4 text-lg font-medium"
+                className="rounded-xl px-4 py-4 text-lg font-medium"
               >
-                Search
+                <span className="hidden md:inline">Search</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </form>

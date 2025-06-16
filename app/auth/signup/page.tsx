@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { useState } from "react";
 import Link from "next/link";
 import { registerUser } from "@/lib/auth";
+import { ApButton } from "@/components/button/button";
+import { ApSelectInput } from "@/components/input/selectorInput";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -91,21 +93,15 @@ export default function SignupPage() {
                 placeHolder="Enter your email"
               />
 
-              <label htmlFor="role" className="font-semibold text-gray-700">
-                Role
-              </label>
-              <select
-                id="role"
+              <ApSelectInput
+                label="Role"
                 name="role"
-                value={values.role}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="border rounded-md p-2"
-              >
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="school">School</option>
-              </select>
+                options={[
+                  { label: "Student", value: "student" },
+                  { label: "Teacher", value: "teacher" },
+                  { label: "School", value: "school" },
+                ]}
+              />
 
               <ApTextInput
                 label="Password"
@@ -114,13 +110,13 @@ export default function SignupPage() {
                 placeHolder="Enter your password"
               />
 
-              <button
+              <ApButton
                 type="submit"
-                className="bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition disabled:opacity-50"
-                disabled={loading || isSubmitting}
-              >
-                {loading || isSubmitting ? "Signing up..." : "Sign up"}
-              </button>
+                className="w-full mt-6"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                title={isSubmitting ? "Processing..." : "Sign In"}
+              />
 
               <div className="text-center mt-4 text-gray-700">
                 <p>
@@ -129,6 +125,15 @@ export default function SignupPage() {
                     <span className="text-blue-600 hover:underline cursor-pointer">
                       Sign In
                     </span>
+                  </Link>
+                </p>
+
+                <p className="mt-2">
+                  <Link
+                    href="/"
+                    className="text-blue-600 hover:underline cursor-pointer"
+                  >
+                    Go back
                   </Link>
                 </p>
               </div>
