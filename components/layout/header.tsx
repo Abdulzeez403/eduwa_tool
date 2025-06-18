@@ -43,6 +43,13 @@ export function Header() {
             Browse Tools
           </Link>
 
+          <Link
+            href="/blogs"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
+            Blogs
+          </Link>
+
           <button
             onClick={handlesubmitTools}
             className="text-sm font-medium transition-colors hover:text-primary"
