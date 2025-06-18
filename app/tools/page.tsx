@@ -12,21 +12,10 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import HomeLayout from "../homeLayout";
-import {
-  addGuestPermissionToAllDocs,
-  fetchFilteredTools,
-  listTools,
-} from "@/lib/crud";
-import {
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  Sheet,
-} from "@/components/ui/sheet";
+import { fetchFilteredTools } from "@/lib/crud";
+import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
 import { useSearchParams } from "next/navigation";
 import { Models } from "appwrite";
 import {
@@ -61,7 +50,7 @@ export default function ToolsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const pageSize = 9; //
+  const pageSize = 9;
   const totalPages = Math.ceil(totalCount / pageSize);
 
   useEffect(() => {
