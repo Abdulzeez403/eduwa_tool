@@ -148,7 +148,7 @@ export function FeaturedToolsSection() {
                           {tool?.name}
                         </CardTitle>
                         <Badge variant="secondary" className="text-xs">
-                          {tool.category}
+                          {tool.category[0]}
                         </Badge>
                       </div>
                       {tool.free ? (

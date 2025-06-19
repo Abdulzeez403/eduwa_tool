@@ -21,15 +21,6 @@ export default function BlogDetailContent({ post }: BlogDetailContentProps) {
     <HomeLayout>
       <article className="max-w-5xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden my-8">
         {/* Back Button */}
-        <div className="p-4 border-b border-slate-100 bg-slate-50">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back to Blog</span>
-          </Link>
-        </div>
 
         {/* Blog Image */}
         {post.image && (

@@ -216,20 +216,6 @@ export default function ToolForm({
           </div>
 
           {/* About, Website Link, Status */}
-          <div className="flex flex-col md:flex-row gap-4">
-            <ApTextInput
-              label="About"
-              name="about"
-              placeHolder="Enter the About"
-              inputClassName="w-full"
-            />
-            <ApTextInput
-              label="Website Link"
-              name="website_link"
-              placeHolder="Enter the Website Link"
-              inputClassName="w-full"
-            />
-          </div>
 
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -280,7 +266,23 @@ export default function ToolForm({
             </div>
           </div>
 
+          <ApTextInput
+            label="Website Link"
+            name="website_link"
+            placeHolder="Enter the Website Link"
+            inputClassName="w-full"
+          />
+
           {/* Features */}
+
+          <ApTextInput
+            label="About"
+            name="about"
+            type="textarea"
+            placeHolder="Enter the About"
+            inputClassName="w-full"
+          />
+
           <div>
             <label className="block font-medium mb-2">Features</label>
             {renderDynamicFieldList(
